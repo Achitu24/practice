@@ -39,9 +39,20 @@ class App extends Component {
             type="text"
             value={this.state.value}
             onChange={this.handleChange}
+            pattern="^[^ ].+[^ ]$"
           />
           {!error && (
-            <p>
+            // Quick bad styling solution to display result better
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                height: "12rem",
+                flexDirection: "column",
+                width: "40%",
+                margin: "auto",
+              }}
+            >
               <span>Result for input '{userInput}' is</span>
               <span>{result}</span>
             </p>

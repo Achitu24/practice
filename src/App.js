@@ -9,6 +9,8 @@ class App extends Component {
       value: "",
       userInput: "",
       result: "",
+      instructions:
+        "Write an array of numbers separated by comma, without spaces",
       error: "Write something",
     };
     this.handleChange = this.handleChange.bind(this);
@@ -28,20 +30,31 @@ class App extends Component {
   }
 
   render() {
-    const { userInput, result, error } = this.state;
+    const { userInput, result, error, instructions } = this.state;
     return (
       <div className="App">
+        {<p>{instructions}</p>}
         <form className="App-form" onSubmit={this.handleSubmit}>
           <input
             type="text"
             value={this.state.value}
             onChange={this.handleChange}
+            pattern="^[^ ].+[^ ]$"
           />
           {!error && (
-            <p>
-              <span>
-                Result for input '{userInput}' is '{result}'
-              </span>
+            // Quick bad styling solution to display result better
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                height: "12rem",
+                flexDirection: "column",
+                width: "40%",
+                margin: "auto",
+              }}
+            >
+              <span>Result for input '{userInput}' is</span>
+              <span>{result}</span>
             </p>
           )}
           {error && <p className="App-error">{error}</p>}

@@ -8,7 +8,7 @@ export const detectSums = (array) => {
   }
 
   //getting rid of spaces and converting to array of numbers
-  const numberArray = array
+  let numberArray = array
     .split(" ")
     .join("")
     .split(",")
@@ -24,7 +24,6 @@ export const detectSums = (array) => {
     throw errorMessage("Please input only numbers!");
 
   let result = [];
-  let hashMap = {};
 
   //HashMap implementation======================
 
@@ -35,25 +34,48 @@ export const detectSums = (array) => {
   //may not be very memory efficient
 
   //creating the hashmap with the sums as keys and the indexes of the array as values
+  let hashMap = {};
 
-  // numberArray.forEach((number, index) => {
-  //   if (hashMap[number]) {
-  //     hashMap[number].push(index);
-  //   } else {
-  //     hashMap[number] = [index];
-  //   }
-  // });
+  numberArray.forEach((number, index) => {
+    if (hashMap[number]) {
+      hashMap[number].push(index);
+    } else {
+      hashMap[number] = [index];
+    }
+  });
+
+  for (let i = 0; i < numberArray.length - 1; i++) {
+    for (let j = i + 1; j <= numberArray.length - 1; j++) {
+      if (hashMap[numberArray[i] + numberArray[j]]) {
+        hashMap[numberArray[i] + numberArray[j]].forEach((value) => {
+          let tempObject = { pA: i, pB: j, sum: value };
+          result.push(tempObject);
+        });
+      }
+    }
+  }
+  //============================================
+
+  //Iterative implementation====================
+
+  //sorting the numbers so that I can loop through the array and make sure I am not getting the same sum indexes twice
+  //looping through the array and checking if the sum of the current index and the next index is in the array
+  //the algorithm is O(n^3), it's not very time efficient but it can be memory effiecient
+
+  // numberArray = numberArray.sort((a, b) => a - b);
 
   // for (let i = 0; i < numberArray.length - 1; i++) {
   //   for (let j = i + 1; j <= numberArray.length - 1; j++) {
-  //     if (hashMap[numberArray[i] + numberArray[j]]) {
-  //       hashMap[numberArray[i] + numberArray[j]].forEach((value) => {
-  //         let tempObject = { pA: i, pB: j, sum: value };
-  //         result.push(tempObject);
-  //       });
+  //     for (let x = j; x <= numberArray.length - 1; x++) {
+  //       if (numberArray[i] + numberArray[j] === numberArray[x]) {
+  //         result.push({ pA: i, pB: j, sum: x });
+  //       } else if (numberArray[i] + numberArray[j] < numberArray[x]) {
+  //         break;
+  //       }
   //     }
   //   }
   // }
+
   //============================================
 
   if (result.length === 0) throw errorMessage("No sums found!");

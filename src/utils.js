@@ -26,7 +26,7 @@ export const detectSums = (array) => {
   if (numberArray.includes(NaN)) throw errorMessage("Input only numbers!");
 
   //looping through the array and checking if the sum of the current index and the next index is in the array
-  //the algorithm is O(n^2), it's not very time efficient but it can be memory effiecient
+  //the algorithm is O(n^3), it's not very time efficient but it can be memory effiecient
   for (let i = 0; i < numberArray.length - 1; i++) {
     for (let j = i + 1; j <= numberArray.length - 1; j++) {
       for (let x = j; x <= numberArray.length - 1; x++) {

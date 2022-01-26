@@ -3,48 +3,56 @@ export const detectSums = (array) => {
     return { message: message };
   };
 
-  if (!array) {
+  if (!array || array.length === 0) {
     throw errorMessage("Array is empty");
   }
 
   //getting rid of spaces and converting to array of numebers
-  const arrayOfNumbers = array
+  const numberArray = array
     .split(" ")
     .join("")
     .split(",")
     .map(Number)
     .map((elem) => Math.round(elem));
 
-  if (arrayOfNumbers.length === 1)
+  //no need to sort the array anymore
+
+  if (numberArray.length === 1)
     throw errorMessage("Please input more than one number!");
 
-  if (arrayOfNumbers.includes(NaN))
+  if (numberArray.includes(NaN))
     throw errorMessage("Please input only numbers!");
 
   let result = [];
   let hashMap = {};
 
   //HashMap implementation
+
   //Complexity: O(n^2 - n)
+  //This algorithm is x4-5 more time effcient than iterative one, I tested it myself
+  //Hashmap implementation allows array not to be sorted,because if the sum is found in the hashmap keys
+  //then we get the value of the key, which is the index of the array where the sum is found
 
-  for (let i = 0; i < arrayOfNumbers.length; i++) {
-    if (hashMap[arrayOfNumbers[i]]) {
-      hashMap[arrayOfNumbers[i]].push(i);
+  numberArray.forEach((number, index) => {
+    if (hashMap[number]) {
+      hashMap[number].push(index);
     } else {
-      hashMap[arrayOfNumbers[i]] = [i];
+      hashMap[number] = [index];
     }
-  }
+  });
 
-  for (let i = 0; i < arrayOfNumbers.length - 1; i++) {
-    for (let j = i + 1; j <= arrayOfNumbers.length - 1; j++) {
-      if (hashMap[arrayOfNumbers[i] + arrayOfNumbers[j]]) {
-        hashMap[arrayOfNumbers[i] + arrayOfNumbers[j]].forEach((value) => {
+  for (let i = 0; i < numberArray.length - 1; i++) {
+    for (let j = i + 1; j <= numberArray.length - 1; j++) {
+      if (hashMap[numberArray[i] + numberArray[j]]) {
+        hashMap[numberArray[i] + numberArray[j]].forEach((value) => {
           let tempObject = { pA: i, pB: j, sum: value };
           result.push(tempObject);
         });
       }
     }
   }
+
+  if (result.length === 0) throw errorMessage("No sums found!");
 
   return JSON.stringify(result);
 };

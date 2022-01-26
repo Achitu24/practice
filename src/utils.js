@@ -7,7 +7,7 @@ export const detectSums = (array) => {
     throw errorMessage("Array is empty");
   }
 
-  //getting rid of spaces and converting to array of numebers
+  //getting rid of spaces and converting to array of numbers
   const numberArray = array
     .split(" ")
     .join("")
@@ -29,10 +29,12 @@ export const detectSums = (array) => {
   //HashMap implementation
 
   //Complexity: O(n^2 - n)
-  //This algorithm is x4-5 more time effcient than iterative one, I tested it myself
+  //This algorithm is x4-5 more time effcient than the iterative one, I tested it myself
   //Hashmap implementation allows array not to be sorted,because if the sum is found in the hashmap keys
   //then we get the value of the key, which is the index of the array where the sum is found
+  //may not be very memory efficient
 
+  //creating the hashmap with the sums as keys and the indexes of the array as values
   numberArray.forEach((number, index) => {
     if (hashMap[number]) {
       hashMap[number].push(index);

@@ -3,37 +3,45 @@ export const detectSums = (array) => {
     return { message: message };
   };
 
-  if (!array) {
-    throw errorMessage("Array is empty");
-  }
+  let result = [];
+
+  if (!array || array.length === 0) throw errorMessage("Input is empty");
 
   //getting rid of spaces and converting to array of numebers
-  const arrayOfNumbers = array
+  let numberArray = array
     .split(" ")
     .join("")
     .split(",")
     .map(Number)
     .map((elem) => Math.round(elem));
 
-  if (arrayOfNumbers.length === 1)
-    throw errorMessage("Please input more than one number!");
+  //sorting the numbers so that I can loop through the array and make sure I am not getting the same sum indexes twice
+  numberArray = numberArray.sort((a, b) => a - b);
 
-  if (arrayOfNumbers.includes(NaN))
-    throw errorMessage("Please input only numbers!");
+  console.log(numberArray);
 
-  let result = [];
+  if (numberArray.length === 1)
+    throw errorMessage("Input more than one number!");
 
-  for (let i = 0; i < arrayOfNumbers.length - 1; i++) {
-    for (let j = i + 1; j <= arrayOfNumbers.length - 1; j++) {
-      for (let x = j; x <= arrayOfNumbers.length - 1; x++) {
-        if (arrayOfNumbers[i] + arrayOfNumbers[j] === arrayOfNumbers[x]) {
+  if (numberArray.includes(NaN)) throw errorMessage("Input only numbers!");
+
+  //looping through the array and checking if the sum of the current index and the next index is in the array
+  //the algorithm is O(n^2), it's not very time efficient but it can be memory effiecient
+  for (let i = 0; i < numberArray.length - 1; i++) {
+    for (let j = i + 1; j <= numberArray.length - 1; j++) {
+      for (let x = j; x <= numberArray.length - 1; x++) {
+        if (numberArray[i] + numberArray[j] === numberArray[x]) {
           result.push({ pA: i, pB: j, sum: x });
-        } else if (arrayOfNumbers[i] + arrayOfNumbers[j] < arrayOfNumbers[x]) {
+        } else if (numberArray[i] + numberArray[j] < numberArray[x]) {
           break;
         }
       }
     }
   }
+
+  console.log(result);
+
+  if (result.length === 0) throw errorMessage("No sums found!");
 
   return JSON.stringify(result);
 };
